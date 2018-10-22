@@ -1,18 +1,15 @@
 '''
 data : 2018.10.06
 author : 极简XksA
-goal : 爬取猫眼《悲伤逆流成河》影评，词云可视化
+goal : 被反爬了，在这里修改数据继续往前爬取，保护main_page数据不被改动
 '''
 
 # 猫眼电影介绍url
 # http://maoyan.com/films/1217236
 
-import sys
-default_encoding="utf-8"
-# 导入开发模块
-import requests,time
+import requests, time
 from fake_useragent import UserAgent
-import json,csv,os
+import json, csv, os
 import pandas as pd
 
 
@@ -57,52 +54,46 @@ class Spidermaoyan():
 
     # 存储文件
     def file_do(self, list_info):
-        projectPath = os.path.abspath(os.path.dirname(sys.argv[0]))
-        maoyan = projectPath + "/maoyan.csv"
+        csv_path = os.getcwd() + "\maoyan.csv"
         # 获取文件大小
-        file_size = os.path.getsize(maoyan)
+        file_size = os.path.getsize(csv_path)
         if file_size == 0:
             # 表头
             name = ['评论日期', '评论者昵称', '性别', '所在城市', '猫眼等级', '评分', '评论内容']
             # 建立DataFrame对象
             file_test = pd.DataFrame(columns=name, data=list_info)
             # 数据写入
-            file_test.to_csv(maoyan, encoding='utf_8_sig', index=False)
+            file_test.to_csv(csv_path, encoding='utf_8_sig', index=False)
         else:
-            with open(maoyan, 'a+', encoding='utf_8_sig', newline='') as file_test:
+            with open(csv_path, 'a+', encoding='utf_8_sig', newline='') as file_test:
                 # 追加到文件后面
                 writer = csv.writer(file_test)
                 # 写入文件
                 writer.writerows(list_info)
 
 
-def spider_maoyan():
-    # 猫眼电影短评接口
-    offset = 0
-    # 电影是2018.9.21上映的
-    startTime = '2018-09-21'
-    day = [22, 23, 24, 25, 26, 27, 28, 29, 30, 1, 2, 3, 4, 5, 6]
-    j = 0
-    page_num = int(20000 / 15)
-    for i in range(page_num):
-        comment_api = 'http://m.maoyan.com/mmdb/comments/movie/1217236.json?_v_=yes&offset={0}&startTime={1}%2021%3A09%3A31'.format(
-            offset, startTime)
-        s0 = Spidermaoyan(comment_api, startTime)
-        json_comment = s0.get_json()
-        if json_comment["total"] == 0:  # 当前时间内评论爬取完成
-            if j < 9:  # 九月份(9天)
-                startTime = '2018-09-%d' % day[j]
-            elif j >= 9 and j < 15:  # 十月份(6天)
-                startTime = '2018-10-%d' % day[j]
-            else:  # 全部爬完
-                break
-            offset = 0
-            j = j + 1
-            continue
-        s0.get_data(json_comment)
-        offset = offset + 15
-        # time.sleep(1)
-
-
-if __name__ == "__main__":
-    spider_maoyan()
+# 猫眼电影短评接口
+offset = 900
+# 电影是2018.9.21上映的
+startTime = '2018-10-06'
+day = [22, 23, 24, 25, 26, 27, 28, 29, 30, 1, 2, 3, 4, 5, 6]
+j = 15
+page_num = int(20000 / 15)
+for i in range(page_num):
+    comment_api = 'http://m.maoyan.com/mmdb/comments/movie/1217236.json?_v_=yes&offset={0}&startTime={1}%2021%3A09%3A31'.format(
+        offset, startTime)
+    s0 = Spidermaoyan(comment_api, startTime)
+    json_comment = s0.get_json()
+    if json_comment["total"] == 0:  # 当前时间内评论爬取完成
+        if j < 9:  # 九月份(9天)
+            startTime = '2018-09-%d' % day[j]
+        elif j >= 9 and j < 15:  # 十月份(6天)
+            startTime = '2018-10-%d' % day[j]
+        else:  # 全部爬完
+            break
+        offset = 0
+        j = j + 1
+        continue
+    s0.get_data(json_comment)
+    offset = offset + 15
+# time.sleep()

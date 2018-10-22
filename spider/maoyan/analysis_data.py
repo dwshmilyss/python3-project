@@ -3,7 +3,7 @@ data : 2018.10.07
 author : 极简XksA
 goal : 可视化分析获取到的数据
 '''
-import csv
+import csv,os
 
 time = []
 nickName = []
@@ -18,7 +18,7 @@ content = ''
 def read_csv():
     content = ''
     # 读取文件内容
-    with open(r'G:\maoyan\maoyan.csv', 'r', encoding='utf_8_sig', newline='') as file_test:
+    with open(os.getcwd()+'\maoyan.csv', 'r', encoding='utf_8_sig', newline='') as file_test:
         # 读文件
         reader = csv.reader(file_test)
         i = 0
@@ -147,7 +147,7 @@ def sex_distribution(gender):
     attr = ["其他", "男", "女"]
     pie = Pie("性别饼图")
     pie.add("", attr, list_num, is_label_show=True)
-    pie.render("H:\PyCoding\spider_maoyan\picture\sex_pie.html")
+    pie.render(os.getcwd()+"\picture\sex_pie.html")
 
 
 # 评论者所在城市分布可视化
@@ -168,7 +168,7 @@ def city_distribution(cityName):
     from pyecharts import Bar
     bar = Bar("评论者城市分布")
     bar.add("", city_name, city_num, is_label_show=True, is_datazoom_show=True)
-    bar.render("H:\PyCoding\spider_maoyan\picture\city_bar.html")
+    bar.render(os.getcwd()+"\picture\city_bar.html")
 
 
 # 每日评论总数可视化分析
@@ -198,7 +198,7 @@ def time_num_visualization(time):
         area_opacity=0.3,
         is_smooth=True,
     )
-    line.render("H:\PyCoding\spider_maoyan\picture\c_num_line.html")
+    line.render(os.getcwd()+"\picture\c_num_line.html")
 
 
 # 评论者猫眼等级、评分可视化
@@ -225,7 +225,7 @@ def level_score_visualization(userLevel, score):
         legend_orient="vertical",
         legend_pos="left",
     )
-    pie01.render("H:\PyCoding\spider_maoyan\picture\level_pie.html")
+    pie01.render(os.getcwd()+"\picture\level_pie.html")
     pie02 = Pie("评分玫瑰饼图", title_pos='center', width=900)
     pie02.add(
         "评分",
@@ -238,7 +238,7 @@ def level_score_visualization(userLevel, score):
         is_legend_show=False,
         is_label_show=True,
     )
-    pie02.render("H:\PyCoding\spider_maoyan\picture\score_pie.html")
+    pie02.render(os.getcwd()+"\picture\score_pie.html")
 
 
 time = []

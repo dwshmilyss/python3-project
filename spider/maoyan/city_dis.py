@@ -17,7 +17,7 @@ import csv, json, os, sys
 from os import path
 
 cityName = []
-projectPath = os.path.abspath(os.path.dirname(sys.argv[0]))
+projectPath = os.getcwd()
 maoyan = projectPath + "/maoyan.csv"
 d = path.dirname(__file__)
 print(d)
@@ -33,9 +33,9 @@ def read_csv():
         for row in reader:
             if i != 0:
                 cityName.append(row[3])
-            # print(row)
             i = i + 1
         print('一共有：' + str(i - 1) + '个')
+        print('一共有：' + str(cityName.__len__()) + '个')
 
 
 # 数据可视化
@@ -96,7 +96,7 @@ def handle(cities):
     # print(len(data), len(data_new))
 
     # 写入覆盖坐标文件
-    with open(r'G:\Python36-32\Lib\site-packages\pyecharts\datasets\city_coordinates.json', mode='w',
+    with open(r'D:\Anaconda2\envs\python35\Lib\site-packages\pyecharts\datasets\city_coordinates.json', mode='w',
               encoding='utf-8') as f:
         f.write(json.dumps(data_new, ensure_ascii=False))  # 将json转换为str
 
